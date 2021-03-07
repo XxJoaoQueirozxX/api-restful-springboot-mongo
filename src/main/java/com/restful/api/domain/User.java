@@ -58,7 +58,6 @@ public class User implements Serializable {
         return posts;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
