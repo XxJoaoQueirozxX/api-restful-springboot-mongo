@@ -1,6 +1,7 @@
 package com.restful.api.resources;
 
 import com.restful.api.domain.User;
+import com.restful.api.dto.UserDTO;
 import com.restful.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -20,9 +22,9 @@ public class UserResource {
     private UserService service;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
-        List<User> users = service.findAll();
-        users.forEach(System.out::println);
+    public ResponseEntity<List<UserDTO>> findAll(){
+        List<UserDTO> users = service.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+
         return ResponseEntity.ok().body(users);
     }
 }
