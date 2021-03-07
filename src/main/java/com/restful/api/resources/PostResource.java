@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,4 +33,17 @@ public class PostResource {
         return ResponseEntity.ok(posts);
     }
 
+    @GetMapping(value = "/fullsearch")
+    public ResponseEntity<List<Post>> fullSearch(
+            @RequestParam(value="text", defaultValue = "") String title,
+            @RequestParam(value="minDate", defaultValue = "") String minDate,
+            @RequestParam(value="maxDate", defaultValue = "") String maxDate
+        ){
+
+        title = URL.decodeParam(title);
+        LocalDate min = URL.convertDate(minDate, Instant.ofEpochMilli(0L).atZone(ZoneId.systemDefault()).toLocalDate());
+        LocalDate max = URL.convertDate(maxDate, LocalDate.now());
+        List<Post> posts = service.fullSearch(title, min, max);
+        return ResponseEntity.ok(posts);
+    }
 }
